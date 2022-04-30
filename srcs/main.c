@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 15:03:04 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/04/30 02:18:19 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/04/30 18:39:24 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,39 +44,67 @@ int	ft_check_death(t_data *data, struct timeval *eat_time)
 		return (0);
 }
 
-int	ft_take_foork(t_data *data, int id, struct timeval *eat_time)
+int	ft_lock_pair(t_data *data, int fork1_id, int fork2_id, struct timeval *eat_time)
 {
-	int	foork1_ok;
-	int foork2_ok;
-	int	foork1_id;
-	int	foork2_id;
+	int	fork_ok;
 
-	foork1_ok = 0;
-	foork2_ok = 0;
-	if ((id + 1) > (data->nb_philosophe - 1))
-		foork1_id = 0; 
-	else 
-		foork1_id = id + 1;
-	if ((id - 1) < 0)
-		foork2_id = (data->nb_philosophe - 1);
-	else 
-		foork1_id = id + 1;
-	while (foork1_ok == 0 && foork2_ok == 0)
+	fork_ok = 0;
+	
+	while (fork_ok != 2)
 	{
 		if (ft_check_death(data, eat_time))
 			return (1);
-		if (foork1_ok == 0 && pthread_mutex_lock(&data->mutex_fork[foork1_id]) == 0)
-			foork1_ok = 1;
-		if (foork2_ok == 0 && pthread_mutex_lock(&data->mutex_fork[foork2_id]) == 0)
-			foork2_ok = 1;
+		if (fork_ok == 0 && pthread_mutex_lock(&data->mutex_fork[fork1_id]) == 0)
+			fork_ok = 1;
+		if (fork_ok == 1 && pthread_mutex_lock(&data->mutex_fork[fork2_id]) == 0)
+			fork_ok = 2;
 	}
+	return (0);
+}
+int	ft_lock_impair(t_data *data, int fork1_id, int fork2_id, struct timeval *eat_time)
+{
+	int	fork_ok;
+
+	fork_ok = 0;
+	
+	while (fork_ok != 2)
+	{
+		if (ft_check_death(data, eat_time))
+			return (1);
+		if (fork_ok == 0 && pthread_mutex_lock(&data->mutex_fork[fork2_id]) == 0)
+			fork_ok = 1;
+		if (fork_ok == 1 && pthread_mutex_lock(&data->mutex_fork[fork1_id]) == 0)
+			fork_ok = 2;
+	}
+	return (0);
+}
+
+int	ft_take_forks(t_data *data, int id, struct timeval *eat_time, t_forks *forks)
+{
+	int	fork1_id;
+	int	fork2_id;
+
+	if ((id + 1) > (data->nb_philosophe - 1))
+		fork1_id = 0; 
+	else 
+		fork1_id = id + 1;
+	if ((id - 1) < 0)
+		fork2_id = (data->nb_philosophe - 1);
+	else 
+		fork2_id = id + 1;
+	forks->fork1 = fork1_id; 
+	forks->fork2 = fork2_id; 
+	if (id % 2 == 0)
+		return (ft_lock_pair(data, fork1_id, fork2_id, eat_time));
+	else if (id % 2 == 1)
+		return (ft_lock_impair(data, fork1_id, fork2_id, eat_time));
 	return (0);
 }
 
 int	ft_sleep(t_data *data, int id, struct timeval *eat_time)
 {
 	struct timeval start;
-	struct timeval end; 
+	struct timeval end;
 
 	gettimeofday(&start, NULL);
 	printf("%d %d is sleeping", time_diff(&data->start, &start), id);
@@ -84,9 +112,9 @@ int	ft_sleep(t_data *data, int id, struct timeval *eat_time)
 	{
 		usleep(10);
 		gettimeofday(&end, NULL);
+	}
 	if (ft_check_death(data, eat_time))
 		return (0);
-	}
 	return (think);
 }
 
@@ -94,9 +122,10 @@ int	ft_sleep(t_data *data, int id, struct timeval *eat_time)
 int	ft_eat(t_data *data, int id, struct timeval *eat_time)
 {
 	struct timeval start;
-	struct timeval end; 
+	struct timeval end;
+   	t_forks	forks;
 
-	if (ft_take_foork(data, id, eat_time) == 1)
+	if (ft_take_forks(data, id, eat_time, &forks) == 1)
 		return (0);
 	gettimeofday(&start, NULL);
 	printf("%d %d is eating",time_diff(&data->start, &start), id);
@@ -105,16 +134,17 @@ int	ft_eat(t_data *data, int id, struct timeval *eat_time)
 		usleep(10);
 		gettimeofday(&end, NULL);
 		if (ft_check_death(data, eat_time))
-			return (0); 
+			return (0);
 	}
+	pthread_mutex_unlock(&data->mutex_fork[forks.fork1]);
+	pthread_mutex_unlock(&data->mutex_fork[forks.fork2]);
 	return (sleep);
 }
 
-int	ft_think(t_data *data, int id, struct timeval *eat_time)
+int	ft_think(t_data *data, int id)
 {
 	struct timeval start;
-	struct timeval end; 
-	
+
 	gettimeofday(&start, NULL);
 	printf("%d %d is thinking",time_diff(&data->start, &start), id);
 	return (eat);
@@ -136,7 +166,7 @@ void	*ft_philosophe(void *ptr)
 		if (etat == sleep)
 			etat = ft_sleep(data, id, &eat_time);
 		if (etat == think)
-			etat = ft_think(data, id, &eat_time) ;
+			etat = ft_think(data, id) ;
 		if (etat == eat)
 			etat = ft_eat(data, id, &eat_time);
 			gettimeofday(&eat_time, NULL);
@@ -148,19 +178,28 @@ void	*ft_philosophe(void *ptr)
 	return (NULL);
 }
 
-void	ft_init_argv(t_data *data, char **argv)
+void	ft_init_argv(t_data *data, char **argv, int argc)
 {
+	int	i;
+
+	i = 0;
 	data->nb_philosophe = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
-	data->time_to_sleep = ft_atoi(argv[4]);
-	data->must_eat = ft_atoi(argv[5]);
+	data->time_to_sleep = ft_atoi(argv[5]);
+	if (argc == 6)
+		data->must_eat = ft_atoi(argv[5]);
+	data->mutex_fork = malloc(sizeof(pthread_mutex_t) * data->nb_philosophe);
+	while (i < data->nb_philosophe)
+	{
+		data->mutex_fork[i] = PTHREAD_MUTEX_INITIALIZER,
+		i++;
+	}
 }
  
 int	ft_init_philosophe(t_data *data, pthread_t *philosophe)
 {
 	int	i;
-	int ctrl; 
 	int	rc;
 
 	i = 0;
@@ -182,14 +221,11 @@ int	ft_init_philosophe(t_data *data, pthread_t *philosophe)
 
 int main(int argc, char **argv)
 {
-	int i = 0;
-	int ret = 0;
 	t_data data;
-	pthread_mutex_t mutex_fork[data.nb_philosophe];
-
+	if (argc != 5 && argc != 6)
+		return (0);
 	gettimeofday(&data.start, NULL);
-	data.mutex_fork = &mutex_fork[0];
-	ft_init_argv(&data, argv);
+	ft_init_argv(&data, argv, argc);
 	pthread_t philosophe[data.nb_philosophe];
 	ft_init_philosophe(&data, &philosophe[0]);
 	return (0);

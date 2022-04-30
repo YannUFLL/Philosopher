@@ -6,11 +6,11 @@
 #    By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/02 12:48:02 by ydumaine          #+#    #+#              #
-#    Updated: 2022/04/30 02:19:02 by ydumaine         ###   ########.fr        #
+#    Updated: 2022/04/30 15:44:47 by ydumaine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = srcs/main.c srcs/utils.c 
+SRCS = srcs/main.c srcs/utils.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -24,7 +24,7 @@ RM = rm -f
 
 HEADER = -I include/
 
-CFLAGS =  
+CFLAGS = -Werror -Wextra -Wall -g 
 
 .c.o: 
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o} ${HEADER} 

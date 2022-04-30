@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:05:26 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/04/30 01:36:38 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/04/30 18:51:55 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
-
+#include <stdlib.h>
 
 
 typedef struct data
@@ -31,6 +31,12 @@ typedef struct data
 	struct timeval start;
    	pthread_mutex_t *mutex_fork; 	
 }			t_data;
+
+typedef struct forks
+{
+	int	fork1;
+	int	fork2;
+}	t_forks; 
 
 int	ft_atoi(const char *str);
 
