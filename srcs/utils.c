@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 13:13:08 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/04/28 13:17:30 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/05 19:11:51 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,18 @@ int ft_atoi(const char *str)
     if (s == 0)
         b = -b;
     return (b);
+}
+
+int time_diff(struct timeval *start, struct timeval *end)
+{
+    return ((end->tv_sec - start->tv_sec) * 1000 + ((end->tv_usec - start->tv_usec) / 1000));
+}
+
+int ft_clean(t_data *data)
+{
+    if (data->mutex_fork != NULL)
+        free(data->mutex_fork);
+    if (data->eat_time != NULL)
+        free(data->eat_time);
+    return (0);
 }

@@ -6,7 +6,7 @@
 #    By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/02 12:48:02 by ydumaine          #+#    #+#              #
-#    Updated: 2022/04/30 15:44:47 by ydumaine         ###   ########.fr        #
+#    Updated: 2022/05/02 16:33:28 by ydumaine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ HEADER = -I include/
 CFLAGS = -Werror -Wextra -Wall -g 
 
 .c.o: 
-			${CC} ${CFLAGS} -c $< -o ${<:.c=.o} ${HEADER} 
+			${CC} ${CFLAGS} -c $< -o ${<:.c=.o} -D_REENTRANT ${HEADER}
 
 ${NAME}:	${OBJS}
 			${LINK} ${NAME} ${OBJS} 

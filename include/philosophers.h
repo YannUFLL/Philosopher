@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:05:26 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/04/30 18:51:55 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/05 16:19:37 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,14 @@ typedef struct data
 	int time_to_eat;
 	int	time_to_sleep;
 	int	must_eat;
+	int	is_dead;
 	int	philosophe_id;
+	int	thread_ready;
+	int	eat_ok;
+	struct timeval *eat_time;
 	struct timeval start;
-   	pthread_mutex_t *mutex_fork; 	
+   	pthread_mutex_t *mutex_fork;
+	pthread_mutex_t mutex_end;	
 }			t_data;
 
 typedef struct forks
