@@ -6,11 +6,24 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:08:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/06 15:52:06 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/06 16:58:46 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h" 
+
+int	ft_init_eatprogress(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	data->eat_progress = malloc(sizeof(int) * data->nb_philosophe);
+	if (data->eat_progress == NULL)
+		return (1);
+	while (i < data->nb_philosophe)
+		data->eat_progress[i++] = 0;
+	return (0);
+}
 
 int	ft_check_death(t_data *data, struct timeval time)
 {
@@ -22,10 +35,13 @@ int	ft_check_death(t_data *data, struct timeval time)
 		pthread_mutex_lock(&data->eat_time_edit);
 		if (time_diff(&data->eat_time[i], &time) > data->time_to_die)
 		{
-			pthread_mutex_lock(&data->print_msg);
-			printf("\n%d %d died", time_diff(&data->start, &time), i + 1);
-			pthread_mutex_unlock(&data->mutex_end);
-			return (1);
+			if (data->eat_progress[i] == 0)
+			{
+				pthread_mutex_lock(&data->print_msg);
+				printf("\n%d %d died", time_diff(&data->start, &time), i + 1);
+				pthread_mutex_unlock(&data->mutex_end);
+				return (1);
+			}
 		}
 		pthread_mutex_unlock(&data->eat_time_edit);
 		i++;
@@ -85,7 +101,10 @@ int	main(int argc, char **argv)
 	gettimeofday(&data.start, NULL);
 	data.eat_ok = 0;
 	pthread_mutex_init(&data.eat_time_edit, NULL);
+	data.eat_progress = NULL;
 	if (ft_init_argv(&data, argv, argc) == 1)
+		return (ft_clean(&data));
+	if (ft_init_eatprogress(&data) == 1)
 		return (ft_clean(&data));
 	if (ft_init_philosophe(&data) == 1)
 		return (ft_clean(&data));

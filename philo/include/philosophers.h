@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:05:26 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/06 14:17:22 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/06 16:58:04 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct data
 	int				thread_ready;
 	int				eat_ok;
 	int				eat_max_enable;
+	int				*eat_progress;
 	struct timeval	*eat_time;
 	struct timeval	start;
 	pthread_mutex_t	*mutex_fork;
