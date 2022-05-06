@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:08:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/06 14:16:36 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/06 15:52:06 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	main(int argc, char **argv)
 	if (argc != 5 && argc != 6)
 		return (0);
 	gettimeofday(&data.start, NULL);
+	data.eat_ok = 0;
 	pthread_mutex_init(&data.eat_time_edit, NULL);
 	if (ft_init_argv(&data, argv, argc) == 1)
 		return (ft_clean(&data));
