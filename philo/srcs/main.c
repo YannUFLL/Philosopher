@@ -6,38 +6,49 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:08:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/06 11:05:07 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/06 14:16:36 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h" 
 
+int	ft_check_death(t_data *data, struct timeval time)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->nb_philosophe)
+	{
+		pthread_mutex_lock(&data->eat_time_edit);
+		if (time_diff(&data->eat_time[i], &time) > data->time_to_die)
+		{
+			pthread_mutex_lock(&data->print_msg);
+			printf("\n%d %d died", time_diff(&data->start, &time), i + 1);
+			pthread_mutex_unlock(&data->mutex_end);
+			return (1);
+		}
+		pthread_mutex_unlock(&data->eat_time_edit);
+		i++;
+	}
+	return (0);
+}
+
 void	*ft_checker(void *ptr)
 {
 	struct timeval	time;
 	t_data			*data;
-	int				i;
 
 	data = (t_data *)ptr;
 	while (1)
 	{
 		gettimeofday(&time, NULL);
-		i = 0;
-		if (data->eat_ok >= (data->nb_philosophe))
-		{
+		if (data->eat_max_enable && data->eat_ok >= (data->nb_philosophe))
+		{			
 			pthread_mutex_unlock(&data->mutex_end);
 			return (0);
 		}
-		while (i < data->nb_philosophe)
-		{
-			if (time_diff(&data->eat_time[i], &time) > data->time_to_die)
-			{
-				printf("\n%d %d died", time_diff(&data->start, &time), i + 1);
-				pthread_mutex_unlock(&data->mutex_end);
-				return (0);
-			}
-			i++;
-		}
+		if (ft_check_death(data, time) == 1)
+			return (0);
 	}
 }
 
@@ -72,6 +83,7 @@ int	main(int argc, char **argv)
 	if (argc != 5 && argc != 6)
 		return (0);
 	gettimeofday(&data.start, NULL);
+	pthread_mutex_init(&data.eat_time_edit, NULL);
 	if (ft_init_argv(&data, argv, argc) == 1)
 		return (ft_clean(&data));
 	if (ft_init_philosophe(&data) == 1)

@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:19:42 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/05 22:24:57 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/06 12:20:44 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ int	ft_init_argv(t_data *data, char **argv, int argc)
 	data->time_to_sleep = ft_atoi(argv[4]);
 	data->is_dead = 0;
 	data->thread_ready = -1;
+	data->eat_max_enable = 0;
 	if (argc == 6)
 		data->must_eat = ft_atoi(argv[5]);
+	if (argc == 6)
+		data->eat_max_enable = 1;
 	data->mutex_fork = malloc(sizeof(pthread_mutex_t) * data->nb_philosophe);
 	data->eat_time = malloc(sizeof(struct timeval) * data->nb_philosophe);
 	if (data->mutex_fork == NULL || data->eat_time == NULL)
@@ -34,6 +37,7 @@ int	ft_init_argv(t_data *data, char **argv, int argc)
 	while (i < data->nb_philosophe)
 		pthread_mutex_init(&data->mutex_fork[i++], NULL);
 	pthread_mutex_init(&data->mutex_end, NULL);
+	pthread_mutex_init(&data->print_msg, NULL);
 	return (0);
 }
 
