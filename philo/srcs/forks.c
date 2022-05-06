@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 19:14:22 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/05 22:17:32 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/06 11:05:53 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int	ft_lock_pair(t_data *data, t_forks *forks, int id)
 
 	pthread_mutex_lock(&data->mutex_fork[forks->fork1]);
 	gettimeofday(&time, NULL);
-	printf("\n%d %d has taken a fork", time_diff(&data->start, &time), id);
+	printf("\n%d %d has taken a fork", time_diff(&data->start, &time), id + 1);
 	pthread_mutex_lock(&data->mutex_fork[forks->fork2]);
 	gettimeofday(&time, NULL);
-	printf("\n%d %d has taken a fork", time_diff(&data->start, &time), id);
+	printf("\n%d %d has taken a fork", time_diff(&data->start, &time), id + 1);
 	return (0);
 }
 
@@ -31,10 +31,10 @@ int	ft_lock_impair(t_data *data, t_forks *forks, int id)
 
 	pthread_mutex_lock(&data->mutex_fork[forks->fork2]);
 	gettimeofday(&time, NULL);
-	printf("\n%d %d has taken a fork", time_diff(&data->start, &time), id);
+	printf("\n%d %d has taken a fork", time_diff(&data->start, &time), id + 1);
 	pthread_mutex_lock(&data->mutex_fork[forks->fork1]);
 	gettimeofday(&time, NULL);
-	printf("\n%d %d has taken a fork", time_diff(&data->start, &time), id);
+	printf("\n%d %d has taken a fork", time_diff(&data->start, &time), id + 1);
 	return (0);
 }
 

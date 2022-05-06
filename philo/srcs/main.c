@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:08:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/05 22:26:23 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/06 11:05:07 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*ft_checker(void *ptr)
 		{
 			if (time_diff(&data->eat_time[i], &time) > data->time_to_die)
 			{
-				printf("\n%d %d is dead", time_diff(&data->start, &time), i);
+				printf("\n%d %d died", time_diff(&data->start, &time), i + 1);
 				pthread_mutex_unlock(&data->mutex_end);
 				return (0);
 			}
