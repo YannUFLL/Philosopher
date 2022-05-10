@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:05:26 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/10 16:16:26 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/10 20:41:31 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,5 @@ void	*ft_philosophe(void *ptr);
 int		ft_check_stop(t_data *data);
 int		ft_wait_thread(t_data *data);
 int		ft_unlock_forks(t_data *data, t_forks *forks);
-
+int		ft_print_msg(t_data *data,int id, char *msg);
 #endif 

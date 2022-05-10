@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:19:42 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/09 19:00:54 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/10 22:35:25 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ int	ft_init_philosophe(t_data *data)
 		rc = pthread_create(&data->philosophe[i], NULL, ft_philosophe, data);
 		if (rc)
 		{
-			printf("ERROR; return code from pthread_create is %d", rc);
+			printf("ERROR; return code from pthread_create is %d", rc); 
 			break ;
-		}
+	   	}
 		i++;
 	}
 	return (0);

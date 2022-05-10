@@ -6,11 +6,12 @@
 #    By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/02 12:48:02 by ydumaine          #+#    #+#              #
-#    Updated: 2022/05/09 17:23:50 by ydumaine         ###   ########.fr        #
+#    Updated: 2022/05/10 17:25:46 by ydumaine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = srcs/main.c srcs/utils.c srcs/action.c srcs/forks.c srcs/init.c 
+SRCS =	srcs/main.c srcs/utils.c srcs/action.c srcs/forks.c srcs/init.c\
+		srcs/utils2.c\
 
 OBJS = ${SRCS:.c=.o}
 
