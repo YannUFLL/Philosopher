@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:05:26 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/06 16:58:04 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:16:26 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ typedef struct data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				must_eat;
-	int				is_dead;
+	int				sim_stop;
 	int				philosophe_id;
-	int				thread_ready;
 	int				eat_ok;
 	int				eat_max_enable;
 	int				*eat_progress;
@@ -43,6 +42,7 @@ typedef struct data
 	pthread_mutex_t	mutex_end;
 	pthread_mutex_t	print_msg;
 	pthread_mutex_t	eat_time_edit;
+	pthread_mutex_t	take_id;
 	pthread_t		*philosophe;
 }			t_data;
 
@@ -64,6 +64,8 @@ int		ft_eat(t_data *data, int id, int *eat_number);
 int		ft_think(t_data *data, int id);
 int		ft_atoi(const char *str);
 void	*ft_philosophe(void *ptr);
-int		ft_init_checker(t_data *data, pthread_t *checker);
-void	*ft_checker(void *ptr);
+int		ft_check_stop(t_data *data);
+int		ft_wait_thread(t_data *data);
+int		ft_unlock_forks(t_data *data, t_forks *forks);
+
 #endif 
