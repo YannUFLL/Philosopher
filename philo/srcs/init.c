@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:19:42 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/10 22:35:25 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:08:49 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	ft_init_philosophe(t_data *data)
 		return (1);
 	i = 0;
 	data->philosophe_id = 0;
+	pthread_mutex_init(&data->start_sim, NULL);
+	pthread_mutex_lock(&data->start_sim);
 	while (i < data->nb_philosophe)
 	{
 		rc = pthread_create(&data->philosophe[i], NULL, ft_philosophe, data);
@@ -62,5 +64,7 @@ int	ft_init_philosophe(t_data *data)
 	   	}
 		i++;
 	}
+	gettimeofday(&data->start, NULL);
+	pthread_mutex_unlock(&data->start_sim);
 	return (0);
 }

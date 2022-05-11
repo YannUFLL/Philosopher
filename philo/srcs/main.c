@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:08:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/10 22:43:31 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/11 19:11:55 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,12 @@ void	*ft_philosophe(void *ptr)
 	id = data->philosophe_id;
 	data->philosophe_id = data->philosophe_id + 1;
 	pthread_mutex_unlock(&data->take_id);
+	pthread_mutex_lock(&data->start_sim);
+	pthread_mutex_unlock(&data->start_sim);
 	gettimeofday(&start, NULL);
 	data->eat_time[id] = start;
-	ft_print_msg(data, id, "SUCCESSFULLY CREATE");
+	if (id % 2 == 0)
+		usleep(1000);
 	while (1)
 	{
 			if (!ft_eat(data, id, &eat_number))
@@ -112,7 +115,6 @@ int	main(int argc, char **argv)
 
 	if (argc != 5 && argc != 6)
 		return (0);
-	gettimeofday(&data.start, NULL);
 	data.eat_ok = 0;
 	pthread_mutex_init(&data.eat_time_edit, NULL);
 	data.eat_progress = NULL;
