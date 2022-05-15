@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:05:26 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/11 11:58:16 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/14 18:00:32 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,10 @@ typedef struct data
 	int				philosophe_id;
 	int				eat_ok;
 	int				eat_max_enable;
-	int				*eat_progress;
 	struct timeval	*eat_time;
 	struct timeval	start;
 	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	mutex_end;
-	pthread_mutex_t	print_msg;
 	pthread_mutex_t	eat_time_edit;
 	pthread_mutex_t	take_id;
 	pthread_mutex_t start_sim;

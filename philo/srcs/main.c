@@ -6,49 +6,32 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:08:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/11 19:11:55 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/14 19:25:32 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h" 
-
-int	ft_init_eatprogress(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	data->eat_progress = malloc(sizeof(int) * data->nb_philosophe);
-	if (data->eat_progress == NULL)
-		return (1);
-	while (i < data->nb_philosophe)
-		data->eat_progress[i++] = 0;
-	return (0);
-}
 
 int	ft_check_death(t_data *data, struct timeval time)
 {
 	int	i;
 
 	i = 0;
-	pthread_mutex_lock(&data->eat_time_edit);
 	while (i < data->nb_philosophe)
 	{
+		pthread_mutex_lock(&data->eat_time_edit);
 		if (time_diff(&data->eat_time[i], &time) > data->time_to_die)
 		{
-			if (data->eat_progress[i] == 0)
-			{
-				pthread_mutex_unlock(&data->eat_time_edit);
-				ft_print_msg(data, i, "died");
-				pthread_mutex_lock(&data->mutex_end);
-				data->sim_stop = 1;
-				pthread_mutex_unlock(&data->mutex_end);
+			pthread_mutex_unlock(&data->eat_time_edit);
+			ft_print_msg(data, i, "died");
+			pthread_mutex_lock(&data->mutex_end);
+			data->sim_stop = 1;
+			pthread_mutex_unlock(&data->mutex_end);
 				return (1);
-			}
 		}
+		pthread_mutex_unlock(&data->eat_time_edit);
 		i++;
 	}
-	pthread_mutex_unlock(&data->eat_time_edit);
-	usleep(500);
 	return (0);
 }
 
@@ -75,6 +58,7 @@ int	ft_checker(void *ptr)
 		{
 			return (0);
 		}
+		usleep(1000);
 	}
 }
 
@@ -95,16 +79,17 @@ void	*ft_philosophe(void *ptr)
 	pthread_mutex_unlock(&data->start_sim);
 	gettimeofday(&start, NULL);
 	data->eat_time[id] = start;
-	if (id % 2 == 0)
-		usleep(1000);
+	if (id % 2 == 0 && data->nb_philosophe % 2 == 1)
+		usleep(data->time_to_eat * 1000);
+	usleep(id * 100);
 	while (1)
 	{
-			if (!ft_eat(data, id, &eat_number))
-				return (0);
-			if (!ft_sleep(data, id))
-				return (0);
-			if (!ft_think(data, id))
-				return (0);
+		if (!ft_eat(data, id, &eat_number))
+			return (0);
+		if (!ft_sleep(data, id))
+			return (0);
+		if (!ft_think(data, id))
+			return (0);
 	}
 	return (0);
 }
@@ -117,10 +102,7 @@ int	main(int argc, char **argv)
 		return (0);
 	data.eat_ok = 0;
 	pthread_mutex_init(&data.eat_time_edit, NULL);
-	data.eat_progress = NULL;
 	if (ft_init_argv(&data, argv, argc) == 1)
-		return (ft_clean(&data));
-	if (ft_init_eatprogress(&data) == 1)
 		return (ft_clean(&data));
 	if (ft_init_philosophe(&data) == 1)
 		return (ft_clean(&data));

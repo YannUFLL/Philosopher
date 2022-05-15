@@ -6,7 +6,7 @@
 /*   By: ydumaine <ydumaine@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:16:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/10 22:25:40 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/14 17:58:59 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ int ft_print_msg(t_data *data, int id, char *msg)
 	}
 	pthread_mutex_unlock(&data->mutex_end);
 	gettimeofday(&time, NULL);
-	pthread_mutex_lock(&data->print_msg);
 	printf("\n%d %d %s", time_diff(&data->start, &time), id + 1, msg);
-	pthread_mutex_unlock(&data->print_msg);
 	return (0);
 }

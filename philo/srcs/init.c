@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:19:42 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/11 12:08:49 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/14 19:21:13 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	ft_init_argv(t_data *data, char **argv, int argc)
 	while (i < data->nb_philosophe)
 		pthread_mutex_init(&data->mutex_fork[i++], NULL);
 	pthread_mutex_init(&data->mutex_end, NULL);
-	pthread_mutex_init(&data->print_msg, NULL);
 	pthread_mutex_init(&data->take_id, NULL);
 	return (0);
 }
@@ -59,9 +58,9 @@ int	ft_init_philosophe(t_data *data)
 		rc = pthread_create(&data->philosophe[i], NULL, ft_philosophe, data);
 		if (rc)
 		{
-			printf("ERROR; return code from pthread_create is %d", rc); 
+			printf("ERROR; return code from pthread_create is %d", rc);
 			break ;
-	   	}
+		}
 		i++;
 	}
 	gettimeofday(&data->start, NULL);

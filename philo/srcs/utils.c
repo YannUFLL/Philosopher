@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 13:13:08 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/10 16:43:15 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/13 17:13:38 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ int	ft_clean(t_data *data)
 		free(data->eat_time);
 	if (data->philosophe != NULL)
 		free(data->philosophe);
-	if (data->eat_progress != NULL)
-		free(data->eat_progress);
 	return (0);
 }
 
