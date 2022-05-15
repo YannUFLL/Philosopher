@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:08:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/14 19:25:32 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/15 17:29:10 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_check_death(t_data *data, struct timeval time)
 			pthread_mutex_lock(&data->mutex_end);
 			data->sim_stop = 1;
 			pthread_mutex_unlock(&data->mutex_end);
-				return (1);
+			return (1);
 		}
 		pthread_mutex_unlock(&data->eat_time_edit);
 		i++;
@@ -72,11 +72,7 @@ void	*ft_philosophe(void *ptr)
 	eat_number = 0;
 	pthread_mutex_lock((&((struct data *)ptr)->take_id));
 	data = (t_data *)ptr;
-	id = data->philosophe_id;
-	data->philosophe_id = data->philosophe_id + 1;
-	pthread_mutex_unlock(&data->take_id);
-	pthread_mutex_lock(&data->start_sim);
-	pthread_mutex_unlock(&data->start_sim);
+	id = ft_take_id(data);
 	gettimeofday(&start, NULL);
 	data->eat_time[id] = start;
 	if (id % 2 == 0 && data->nb_philosophe % 2 == 1)

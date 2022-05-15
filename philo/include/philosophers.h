@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:05:26 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/14 18:00:32 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/15 17:54:28 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct data
 	pthread_mutex_t	mutex_end;
 	pthread_mutex_t	eat_time_edit;
 	pthread_mutex_t	take_id;
-	pthread_mutex_t start_sim;
+	pthread_mutex_t	start_sim;
 	pthread_t		*philosophe;
 }			t_data;
 
@@ -66,5 +66,6 @@ void	*ft_philosophe(void *ptr);
 int		ft_check_stop(t_data *data);
 int		ft_wait_thread(t_data *data);
 int		ft_unlock_forks(t_data *data, t_forks *forks);
-int		ft_print_msg(t_data *data,int id, char *msg);
+int		ft_print_msg(t_data *data, int id, char *msg);
+int		ft_take_id(t_data *data);
 #endif 

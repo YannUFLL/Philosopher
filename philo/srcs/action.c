@@ -6,7 +6,7 @@
 /*   By: ydumaine <ydumaine@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 19:14:14 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/14 19:19:02 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/15 17:41:54 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	ft_eat(t_data *data, int id, int *eat_number)
 	if (ft_check_stop(data))
 		return (ft_unlock_forks(data, &forks));
 	ft_print_msg(data, id, "is eating");
-	usleep(data->time_to_eat * 1000 - 5000);
+	usleep(data->time_to_eat * 1000);
 	ft_unlock_forks(data, &forks);
 	if (*eat_number == data->must_eat)
 	{
