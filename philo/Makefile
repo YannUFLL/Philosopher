@@ -6,7 +6,7 @@
 #    By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/02 12:48:02 by ydumaine          #+#    #+#              #
-#    Updated: 2022/05/10 17:25:46 by ydumaine         ###   ########.fr        #
+#    Updated: 2022/05/16 19:09:45 by ydumaine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,13 +25,15 @@ RM = rm -f
 
 HEADER = -I include/
 
-CFLAGS = -Werror -Wextra -Wall -g -fsanitize=thread
+CFLAGS = -Werror -Wextra -Wall -g
+#-g -fsanitize=thread
 
 .c.o: 
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o} ${HEADER}
 
 ${NAME}:	${OBJS}
-			${LINK} ${NAME} ${OBJS} -fsanitize=thread
+			${LINK} ${NAME} ${OBJS} 
+#-g -fsanitize=thread
 
 all:		${NAME}
 

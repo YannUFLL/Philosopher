@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 12:05:26 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/15 17:54:28 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/16 19:51:17 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@
 
 typedef struct data
 {
-	int				nb_philosophe;
+	int				nb_philosophers;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				must_eat;
 	int				sim_stop;
-	int				philosophe_id;
+	int				philosopher_id;
 	int				eat_ok;
 	int				eat_max_enable;
 	struct timeval	*eat_time;
@@ -42,7 +42,8 @@ typedef struct data
 	pthread_mutex_t	eat_time_edit;
 	pthread_mutex_t	take_id;
 	pthread_mutex_t	start_sim;
-	pthread_t		*philosophe;
+	pthread_mutex_t	mutex_print;
+	pthread_t		*philosopher;
 }			t_data;
 
 typedef struct forks
@@ -52,7 +53,7 @@ typedef struct forks
 }	t_forks;
 
 int		ft_init_argv(t_data *data, char **argv, int argc);
-int		ft_init_philosophe(t_data *data);
+int		ft_init_philosophers(t_data *data);
 int		ft_init_checker(t_data *data, pthread_t *checker);
 int		ft_atoi(const char *str);
 int		time_diff(struct timeval *start, struct timeval *end);
@@ -62,10 +63,11 @@ int		ft_sleep(t_data *data, int id);
 int		ft_eat(t_data *data, int id, int *eat_number);
 int		ft_think(t_data *data, int id);
 int		ft_atoi(const char *str);
-void	*ft_philosophe(void *ptr);
+void	*ft_philosopher(void *ptr);
 int		ft_check_stop(t_data *data);
 int		ft_wait_thread(t_data *data);
 int		ft_unlock_forks(t_data *data, t_forks *forks);
 int		ft_print_msg(t_data *data, int id, char *msg);
 int		ft_take_id(t_data *data);
+void	ft_usleep(int us);
 #endif 

@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 13:13:08 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/15 17:36:14 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/16 19:52:11 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ int	ft_clean(t_data *data)
 		free(data->mutex_fork);
 	if (data->eat_time != NULL)
 		free(data->eat_time);
-	if (data->philosophe != NULL)
-		free(data->philosophe);
+	if (data->philosopher != NULL)
+		free(data->philosopher);
 	return (0);
 }
 
@@ -76,9 +76,9 @@ int	ft_wait_thread(t_data *data)
 	int	i;
 
 	i = 0;
-	while (i < data->nb_philosophe)
+	while (i < data->nb_philosophers)
 	{
-		pthread_join(data->philosophe[i++], NULL);
+		pthread_join(data->philosopher[i++], NULL);
 	}
 	return (0);
 }

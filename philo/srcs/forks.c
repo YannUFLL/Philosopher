@@ -6,7 +6,7 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 19:14:22 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/14 19:20:25 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/16 20:00:07 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_lonely(t_data *data)
 {
-	if (data->nb_philosophe == 1)
+	if (data->nb_philosophers == 1)
 	{
 		while (1)
 		{
@@ -75,7 +75,7 @@ int	ft_lock_impair(t_data *data, t_forks *forks, int id)
 
 int	ft_take_forks(t_data *data, int id, t_forks *forks)
 {
-	if (id == data->nb_philosophe - 1)
+	if (id == data->nb_philosophers - 1)
 	{
 		forks->fork1 = id;
 		forks->fork2 = 0;
@@ -85,7 +85,7 @@ int	ft_take_forks(t_data *data, int id, t_forks *forks)
 		forks->fork1 = id;
 		forks->fork2 = id + 1;
 	}
-	if (id % 2 == 1 && data->nb_philosophe % 2 == 0)
+	if (id % 2 == 1 && data->nb_philosophers % 2 == 0)
 		return (ft_lock_impair(data, forks, id));
 	else
 		return (ft_lock_pair(data, forks, id));

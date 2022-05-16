@@ -6,20 +6,36 @@
 /*   By: ydumaine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 21:08:34 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/15 17:29:10 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/16 21:15:46 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h" 
+
+int	ft_check_eat(t_data *data)
+{
+	if (data->eat_max_enable && data->eat_ok >= (data->nb_philosophers))
+	{	
+		pthread_mutex_lock(&data->mutex_end);
+		data->sim_stop = 1;
+		pthread_mutex_unlock(&data->eat_time_edit);
+		pthread_mutex_unlock(&data->mutex_end);
+		printf("\nAll the philosophers have eaten : %d", data->must_eat);
+		return (1);
+	}
+	return (0);
+}
 
 int	ft_check_death(t_data *data, struct timeval time)
 {
 	int	i;
 
 	i = 0;
-	while (i < data->nb_philosophe)
+	while (i < data->nb_philosophers)
 	{
 		pthread_mutex_lock(&data->eat_time_edit);
+		if (ft_check_eat(data) == 1)
+			return (1);
 		if (time_diff(&data->eat_time[i], &time) > data->time_to_die)
 		{
 			pthread_mutex_unlock(&data->eat_time_edit);
@@ -43,26 +59,17 @@ int	ft_checker(void *ptr)
 	data = (t_data *)ptr;
 	while (1)
 	{
+		if (ft_check_eat(data) == 1)
+			return (1);
 		gettimeofday(&time, NULL);
-		pthread_mutex_lock(&data->eat_time_edit);
-		if (data->eat_max_enable && data->eat_ok >= (data->nb_philosophe))
-		{	
-			pthread_mutex_unlock(&data->eat_time_edit);
-			pthread_mutex_lock(&data->mutex_end);
-			data->sim_stop = 1;
-			pthread_mutex_unlock(&data->mutex_end);
-			return (0);
-		}
-		pthread_mutex_unlock(&data->eat_time_edit);
 		if (ft_check_death(data, time) == 1)
 		{
 			return (0);
 		}
-		usleep(1000);
 	}
 }
 
-void	*ft_philosophe(void *ptr)
+void	*ft_philosopher(void *ptr)
 {
 	int				id;
 	t_data			*data;
@@ -75,7 +82,7 @@ void	*ft_philosophe(void *ptr)
 	id = ft_take_id(data);
 	gettimeofday(&start, NULL);
 	data->eat_time[id] = start;
-	if (id % 2 == 0 && data->nb_philosophe % 2 == 1)
+	if (id % 2 == 0 && data->nb_philosophers % 2 == 1)
 		usleep(data->time_to_eat * 1000);
 	usleep(id * 100);
 	while (1)
@@ -100,7 +107,7 @@ int	main(int argc, char **argv)
 	pthread_mutex_init(&data.eat_time_edit, NULL);
 	if (ft_init_argv(&data, argv, argc) == 1)
 		return (ft_clean(&data));
-	if (ft_init_philosophe(&data) == 1)
+	if (ft_init_philosophers(&data) == 1)
 		return (ft_clean(&data));
 	ft_checker(&data);
 	ft_wait_thread(&data);

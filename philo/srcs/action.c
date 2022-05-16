@@ -6,7 +6,7 @@
 /*   By: ydumaine <ydumaine@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 19:14:14 by ydumaine          #+#    #+#             */
-/*   Updated: 2022/05/15 17:41:54 by ydumaine         ###   ########.fr       */
+/*   Updated: 2022/05/16 19:18:25 by ydumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_sleep(t_data *data, int id)
 	if (ft_check_stop(data))
 		return (0);
 	ft_print_msg(data, id, "is sleeping");
-	usleep(data->time_to_sleep * 1000);
+	ft_usleep(data->time_to_sleep * 1000);
 	return (THINK);
 }
 
@@ -38,20 +38,16 @@ int	ft_eat(t_data *data, int id, int *eat_number)
 		return (0);
 	}
 	pthread_mutex_lock(&data->eat_time_edit);
+	if (*eat_number == data->must_eat)
+		data->eat_ok++;
 	gettimeofday(&start, NULL);
 	data->eat_time[id] = start;
 	pthread_mutex_unlock(&data->eat_time_edit);
 	if (ft_check_stop(data))
 		return (ft_unlock_forks(data, &forks));
 	ft_print_msg(data, id, "is eating");
-	usleep(data->time_to_eat * 1000);
+	ft_usleep(data->time_to_eat * 1000);
 	ft_unlock_forks(data, &forks);
-	if (*eat_number == data->must_eat)
-	{
-		pthread_mutex_lock(&data->eat_time_edit);
-		data->eat_ok++;
-		pthread_mutex_unlock(&data->eat_time_edit);
-	}
 	(*eat_number)++;
 	return (SLEEP);
 }
